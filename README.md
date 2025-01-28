@@ -1,2 +1,2 @@
 # deepfake-bot
-Deepfake Faceebook Bot
+Deepfake Facebook Bot

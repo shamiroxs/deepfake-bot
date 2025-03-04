@@ -74,9 +74,6 @@ def main():
         print("No video files found.")
         return
     
-    save_directory = os.path.join(os.getcwd(), "data", "videos")
-    os.makedirs(save_directory, exist_ok=True)
-    
     for index, object_key in enumerate(file_keys):
         local_video_path = os.path.join(os.getcwd(), f"./data/videos/download_{index}.mp4")
         

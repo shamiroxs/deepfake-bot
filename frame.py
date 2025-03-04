@@ -18,25 +18,24 @@ mtcnn = MTCNN(keep_all=True, device=device)
 cap = cv2.VideoCapture(video_path)
 fps = int(cap.get(cv2.CAP_PROP_FPS))  # Frames per second
 print(f"Original Frames per second: {fps}")
+
+# Convert video to 7 FPS and replace original file
+target_fps = 7
+temp_video_path = video_path.replace(".mp4", "_temp.mp4")
+os.system(f"ffmpeg -i {video_path} -filter:v fps={target_fps} {temp_video_path} -y")
+os.replace(temp_video_path, video_path)  # Replace original with converted video
+
+# Reload video with new FPS
+cap = cv2.VideoCapture(video_path)
+fps = target_fps
 total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 duration = total_frames / fps  # Total duration in seconds
-"""
-# If FPS is greater than 24, convert it to 24 FPS
-target_fps = 24
-if fps > target_fps:
-    temp_video_path = "./data/videos/temp_video.mp4"
-    os.system(f"ffmpeg -i {video_path} -filter:v fps={target_fps} {temp_video_path} -y")
-    video_path = temp_video_path  # Use the converted video
-    cap = cv2.VideoCapture(video_path)
-    fps = target_fps
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    duration = total_frames / fps
-    print("Video converted to 24 FPS")
-"""
+print(f"Video converted to {target_fps} FPS and replaced successfully.")
+
 # Metadata storage
 metadata = {}
 frame_count = 0
-segment_duration = 0.5  # 0.5-second segments
+segment_duration = 2  # 2-second segments
 
 while cap.isOpened():
     ret, frame = cap.read()

@@ -11,6 +11,7 @@ input_frames_dir = "./data/face"
 metadata_path = "./data/face_metadata.json"
 output_results_file = "./classification_results.txt"
 model_path = "./model/efficientnet_v2_s.pth"
+DEEPFAKE_CONFIDENCE = 0.75
 
 # Model configuration
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -69,8 +70,7 @@ with open(output_results_file, "w") as results_file:
             if frame is None:
                 continue
             
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            image = Image.fromarray(frame_rgb)
+            image = Image.open(frame_path).convert("RGB")
             processed_image = preprocess_transform(image).unsqueeze(0).to(device)
             
             # Inference
@@ -83,7 +83,7 @@ with open(output_results_file, "w") as results_file:
                 deepfake_frames.add(frame_id)  # If any face is deepfake, mark the frame
         
         # Apply 20% deepfake threshold per segment
-        if len(total_frames) > 0 and (len(deepfake_frames) / len(total_frames)) > 0.75:
+        if len(total_frames) > 0 and (len(deepfake_frames) / len(total_frames)) > DEEPFAKE_CONFIDENCE:
             segment_label = "Deepfake"
         else:
             segment_label = "Authentic"

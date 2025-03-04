@@ -78,7 +78,7 @@ def main():
     os.makedirs(save_directory, exist_ok=True)
     
     for index, object_key in enumerate(file_keys):
-        local_video_path = os.path.join(os.getcwd(), f"download_{index}.mp4")
+        local_video_path = os.path.join(os.getcwd(), f"./data/videos/download_{index}.mp4")
         
         # Download video
         downloaded_file = download_from_s3(AWS_BUCKET_NAME, object_key, local_video_path)

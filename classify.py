@@ -2,6 +2,7 @@ import os
 import json
 import torch
 import cv2
+import time
 import torchvision.transforms as transforms
 from PIL import Image
 from torch import nn
@@ -12,6 +13,8 @@ metadata_path = "./data/face_metadata.json"
 output_results_file = "./classification_results.txt"
 model_path = "./model/efficientnet_v2_s.pth"
 DEEPFAKE_CONFIDENCE = 0.75
+
+start_time = time.time()
 
 # Model configuration
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -91,8 +94,12 @@ with open(output_results_file, "w") as results_file:
         segment_results[segment] = segment_label
         results_file.write(f"Segment {segment}: {segment_label}\n")
         
+end_time = time.time()
+
 # Print final segment classifications
 print("Segment-wise classification results:")
 for segment, label in segment_results.items():
     print(f"Segment {segment}: {label}")
 
+
+print(f"Total execution time: {end_time - start_time:.2f} seconds")

@@ -1,0 +1,13 @@
+torch==2.2.2
+torchvision==0.17.2
+torchaudio  # Not found in the list, install separately if needed
+efficientnet-pytorch==0.7.1
+facenet-pytorch==2.6.0
+numpy==1.24.3
+opencv-python==4.11.0.86
+Pillow==10.2.0
+tqdm==4.67.1
+jsonschema  # Not found in the list, install separately if needed
+boto3==1.36.8
+requests==2.32.3
+Flask  # Not found in the list, install separately if needed

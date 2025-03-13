@@ -5,7 +5,7 @@ import os
 SELECTION_FILE = "./selection.txt"
 
 # List of scripts to execute in order
-scripts = ["selection.py", "frame.py", "classify.py", "result.py"]
+scripts = ["frame.py", "classify.py", "result.py"]
 
 for script in scripts:
     print(f"Running {script}...\n")

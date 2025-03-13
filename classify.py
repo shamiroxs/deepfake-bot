@@ -9,10 +9,10 @@ from torch import nn
 
 # Paths
 input_frames_dir = "./data/face"
-metadata_path = "./data/face_metadata.json"
-output_results_file = "./classification_results.txt"
+metadata_path = "./data/output/face_metadata.json"
+output_results_file = "./data/output/classification_results.txt"
 model_path = "./model/efficientnet_v2_s.pth"
-DEEPFAKE_CONFIDENCE = 0.75
+DEEPFAKE_CONFIDENCE = 0.6623 
 
 start_time = time.time()
 
@@ -82,7 +82,7 @@ with open(output_results_file, "w") as results_file:
                 _, predicted = torch.max(outputs, 1)
             
             total_frames.add(frame_id)  # Track frames in the segment
-            if predicted.item() == 0:
+            if predicted.item() == 0: # changed to 1 for current model
                 deepfake_frames.add(frame_id)  # If any face is deepfake, mark the frame
         
         # Apply 20% deepfake threshold per segment

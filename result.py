@@ -1,8 +1,8 @@
 import json
 
 # Paths
-classification_results_path = "./classification_results.txt"
-metadata_path = "./data/face_metadata.json"
+classification_results_path = "./data/output/final_classification_result.txt"
+metadata_path = "./data/output/face_metadata.json"
 
 # Load segment-wise classification results
 segment_labels = {}
@@ -34,7 +34,7 @@ if deepfake_segments:
             
             consecutive_deepfake += 1
             
-            if consecutive_deepfake >= 3:  # Start tracking from the first deepfake in the sequence
+            if consecutive_deepfake >= 2:  # Start tracking from the first deepfake in the sequence
                 consecutive_authentic = 0  # Reset authentic counter
                 if not tracking_deepfake:
                     flagged_intervals.append((first_deepfake, seg))
@@ -45,7 +45,7 @@ if deepfake_segments:
             consecutive_authentic += 1
             first_deepfake = None  # Reset first deepfake marker
             
-            if consecutive_authentic >= 3:  # Stop tracking if too many authentic frames appear
+            if consecutive_authentic >= 2:  # Stop tracking if too many authentic frames appear
                 tracking_deepfake = False
                 consecutive_deepfake = 0  # Reset deepfake counter
 

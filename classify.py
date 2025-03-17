@@ -12,7 +12,7 @@ input_frames_dir = "./data/face"
 metadata_path = "./data/output/face_metadata.json"
 output_results_file = "./data/output/classification_results.txt"
 model_path = "./model/efficientnet_v2_s.pth"
-DEEPFAKE_CONFIDENCE = 0.6623 
+DEEPFAKE_CONFIDENCE = 0.6625
 
 start_time = time.time()
 
@@ -97,9 +97,9 @@ with open(output_results_file, "w") as results_file:
 end_time = time.time()
 
 # Print final segment classifications
-print("Segment-wise classification results:")
-for segment, label in segment_results.items():
-    print(f"Segment {segment}: {label}")
+#print("Face classification results:")
+#for segment, label in segment_results.items():
+    #print(f"Segment {segment}: {label}")
 
 
-print(f"Total execution time: {end_time - start_time:.2f} seconds")
+print(f"Total execution time for classify.py : {end_time - start_time:.2f} seconds")

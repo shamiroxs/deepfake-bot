@@ -65,7 +65,7 @@ with open(output_results_file, "w") as results_file:
             
             with torch.no_grad():
                 outputs = model(batch_tensor)
-                predictions = torch.argmax(outputs, dim=1).cpu().numpy()
+                predictions = torch.softmax(outputs, dim=1)[:, 1].cpu().numpy()
             
             for frame_id, pred in zip(batch_frame_ids, predictions):
                 total_frames.add(frame_id)

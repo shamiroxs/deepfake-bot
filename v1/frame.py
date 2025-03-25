@@ -7,7 +7,7 @@ from facenet_pytorch import MTCNN
 import shutil
 
 # Paths
-video_path = "./data/videos/download_1.mp4"
+video_path = "./data/videos/download_0.mp4"
 output_faces_dir = "./data/face"
 output_frames_dir = "./data/videoframes"
 face_metadata_file = "./data/output/face_metadata.json"
@@ -36,10 +36,15 @@ total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 duration = total_frames / fps  # Total duration in seconds
 
 # Target FPS
+'''
 if(duration < 30):
 	target_fps = 24 if fps > 23 else fps
 else:
 	target_fps = 7
+'''
+
+target_fps = 7
+
 frame_interval = int(fps / target_fps) if fps >= target_fps else 1
 
 print(f"Processing video at {target_fps} FPS.")

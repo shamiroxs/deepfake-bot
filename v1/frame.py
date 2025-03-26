@@ -7,9 +7,8 @@ from facenet_pytorch import MTCNN
 import shutil
 
 # Paths
-video_path = "./data/videos/download_0.mp4"
+video_path = "./data/videos/yadhu.mp4"
 output_faces_dir = "./data/face"
-output_frames_dir = "./data/videoframes"
 face_metadata_file = "./data/output/face_metadata.json"
 
 os.makedirs(output_faces_dir, exist_ok=True)
@@ -52,10 +51,9 @@ print(f"Total video duration: {duration:.2f} seconds")
 
 # Metadata storage
 face_metadata = {}
-bg_metadata = {}  # New bg metadata storage
 frame_count = 0
 saved_frame_count = 0
-segment_duration = 2  # 2-second segments
+segment_duration = 1  # 2-second segments
 
 start_time = time.time()
 
@@ -67,20 +65,6 @@ while cap.isOpened():
     if frame_count % frame_interval == 0:
         timestamp = frame_count / fps  # Current time in seconds
         segment_id = int(timestamp // segment_duration)  # Assign frame to a segment
-
-        # Save extracted frame
-        frame_filename = f"frame_{saved_frame_count:04d}.jpg"
-        frame_path = os.path.join(output_frames_dir, frame_filename)
-        cv2.imwrite(frame_path, frame)
-
-        # Add frame path to bg_metadata
-        if segment_id not in bg_metadata:
-            bg_metadata[segment_id] = []
-        bg_metadata[segment_id].append({
-            "frame": frame_count,
-            "timestamp": round(timestamp, 2),
-            "frame_path": frame_path
-        })
 
         # Convert frame to RGB for MTCNN
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -110,13 +94,16 @@ while cap.isOpened():
                     if segment_id not in face_metadata:
                         face_metadata[segment_id] = []
                     face_metadata[segment_id].append({
-                        "frame": frame_count,
-                        "timestamp": round(timestamp, 2),
-                        "face_path": face_path
-                    })
+                     "frame": frame_count,
+        	     "timestamp": round(timestamp, 2),
+        	     "face_path": face_path
+    		    })
+            saved_frame_count += 1
 
-        saved_frame_count += 1
-    
+        else:
+        	if segment_id not in face_metadata:
+        		face_metadata[segment_id] = []
+
     frame_count += 1
 
 cap.release()
@@ -126,7 +113,6 @@ with open(face_metadata_file, "w") as f:
     json.dump(face_metadata, f, indent=4)
 
 end_time = time.time()
-print(f"Frames extracted and saved to {output_frames_dir}")
 print(f"Faces extracted and saved to {output_faces_dir}")
 print(f"Face metadata saved to {face_metadata_file}")
 print(f"Total execution time: {end_time - start_time:.2f} seconds")

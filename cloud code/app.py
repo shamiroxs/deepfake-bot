@@ -7,8 +7,7 @@ from google.cloud import pubsub_v1
 app = Flask(__name__)
 
 VERIFY_TOKEN = "gopu@yadhu@shamir@123"
-PAGE_ACCESS_TOKEN = "EAAQiflGBAxIBOZC6zAjiOFEnW0PlMre5SioNEQXDNRydNBeyWv17ilMrQOCdwI6xg8CFgqct2utYKqDV8AiZA3wJQP5L55KtdTRZCMZASwh7Md0exLWmxVlJ6Rn6MBXyhyv1kZCkcZBTFNiZBKgh76DkWMXxawqUNG3ih33nBmNa7dH00XcVOYjbZAQITPXPueipF9KJCXZCJKgZDZD"  # Get from Facebook Developer Console
-
+PAGE_ACCESS_TOKEN = "EAAQiflGBAxIBOZC6zAjiOFEnW0PlMre5SioNEQXDNRydNBeyWv17ilMrQOCdwI6xg8CFgqct2utYKqDV8AiZA3wJQP5L55KtdTRZCMZASwh7Md0exLWmxVlJ6Rn6MBXyhyv1kZCkcZBTFNiZBKgh76DkWMXxawqUNG3ih33nBmNa7dH00XcVOYjbZAQITPXPueipF9KJCXZCJKgZDZD"  
 BUCKET_NAME = "myapp-code-storage"
 VIDEO_PATH = "videos/download.mp4"
 
@@ -19,7 +18,6 @@ sender_map = {}
 @app.route("/receive_result", methods=["POST"])
 def receive_result():
     try:
-        # Get the JSON data sent from Colab
         result = request.get_json()
         print(f"Received result: {result}")
 
@@ -28,13 +26,10 @@ def receive_result():
 
         final_decision = result["final_decision"]
 
-        # Get the sender ID (assuming it's stored based on the last video message_id)
         if not sender_map:
             return jsonify({"status": "error", "message": "No sender ID found"}), 400
         
-        sender_id = list(sender_map.values())[-1]  # Get the last sender ID
-        
-        # Send the detection result to the user
+        sender_id = list(sender_map.values())[-1] 
         send_message(sender_id, f"Video is {final_decision}")
 
         return jsonify({"status": "success", "message": f"Result received and sent to user: {final_decision}"}), 200
@@ -65,7 +60,7 @@ def webhook():
                 message_id = message_event["message"]["mid"]
                 
                 if message_id in processed_messages:
-                    continue  # Skip duplicate processing
+                    continue 
                 
                 processed_messages.add(message_id)
                 
@@ -88,8 +83,7 @@ def upload_video_to_gcs(video_url):
         blob = bucket.blob(VIDEO_PATH)
         blob.upload_from_string(response.content, content_type="video/mp4")
         print("Video uploaded to Google Cloud Storage")
-
-        # Publish message to Pub/Sub
+        
         publish_to_pubsub("Video uploaded")
 
 def publish_to_pubsub(message):

@@ -8,7 +8,6 @@ import torchvision.transforms as transforms
 from facenet_pytorch import MTCNN
 from PIL import Image
 
-# Paths
 video_path = "/content/input.mp4"
 output_results_file = "/content/drive/MyDrive/DeepFakeDetection/data/output/classification_results.txt"
 model_path = "/content/drive/MyDrive/DeepFakeDetection/model/efficientnet_v2_s.pth"
@@ -16,17 +15,14 @@ model_path = "/content/drive/MyDrive/DeepFakeDetection/model/efficientnet_v2_s.p
 if os.path.exists(output_results_file):
     os.remove(output_results_file)
 
-# Initialize MTCNN
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 mtcnn = MTCNN(keep_all=True, device=device)
 
-# Load Classification Model
 model = torch.hub.load('hankyul2/EfficientNetV2-pytorch', 'efficientnet_v2_s', pretrained=True, nclass=2)
 model.load_state_dict(torch.load(model_path, map_location=device))
 model.to(device)
 model.eval()
 
-# Define preprocessing transforms
 preprocess_transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -100,15 +96,14 @@ while cap.isOpened():
                     
                     if prediction == 1:
                         frame_is_deepfake = True
-                        break  # If one face is deepfake, mark entire frame as deepfake
-        
+                        break  
+                        
         segment_frame_labels.append(1 if frame_is_deepfake else 0)
     
     frame_count += 1
 
 cap.release()
 
-# Process remaining frames
 if segment_frame_labels:
     result = classify_segment(segment_frame_labels)
     print(f"Segment {segment_id}: {result}")

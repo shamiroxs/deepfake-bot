@@ -1,10 +1,8 @@
 import subprocess
 import time
 
-# List of scripts to execute in order
 scripts = ["/content/drive/MyDrive/DeepFakeDetection/cloud.py", "/content/drive/MyDrive/DeepFakeDetection/detect.py", "/content/drive/MyDrive/DeepFakeDetection/result.py"]
 
-# Start time
 start_time = time.time()
 
 for script in scripts:
@@ -16,8 +14,5 @@ for script in scripts:
         print(f"Error executing {script}: {e}")
         break
 
-# End time
 end_time = time.time()
-
-# Print overall execution time
 print(f"Overall execution time: {end_time - start_time:.2f} seconds")

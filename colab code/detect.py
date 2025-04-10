@@ -3,7 +3,6 @@ import cv2
 import torch
 import json
 import time
-import shutil
 import torchvision.transforms as transforms
 from facenet_pytorch import MTCNN
 from PIL import Image
